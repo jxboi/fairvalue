@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080d16"><meta name="description" content="Fair value analysis of individual stocks. DBS first.">
+<title>FairValue — DBS Research</title><link rel="stylesheet" href="./src/styles.css"><script type="module" src="./src/app.js"></script></head>
+<body>
+<div class="layout"><aside class="sidebar">
+  <a class="brand" href="#top"><span class="logo">f<span>.</span></span> fairvalue</a>
+  <p class="section-label">WORKSPACE</p>
+  <nav><a class="selected" href="#top">▣ &nbsp; Stock analysis</a><a href="#models">≋ &nbsp; Models</a><a href="#fundamentals">▤ &nbsp; Fundamentals</a><a href="#sources">↗ &nbsp; Sources</a></nav>
+  <p class="section-label">WATCHLIST <span class="subtle">01</span></p>
+  <div class="stock"><span class="stock-symbol">D</span><span><strong>DBS Group</strong><small>D05 · SGX</small></span><i></i></div>
+  <div class="soon">+ More stocks coming soon</div>
+  <div class="sidebar-foot"><b class="dot"></b> Local research workspace<small>Assumptions stay in your browser</small></div>
+</aside><main id="top">
+  <div class="topbar"><span>Workspace <em>/</em> Stock analysis <em>/</em> DBS</span><span class="status"><b class="dot"></b> Snapshot · 23 Oct 2026</span></div>
+  <div class="body">
+  <div class="heading"><div><span class="eyebrow">EQUITY RESEARCH &nbsp; / &nbsp; BANKS</span><div class="company"><div class="company-icon">DBS</div><div><h1>DBS Group Holdings</h1><div class="subtle">SGX: D05 &nbsp; · &nbsp; Singapore &nbsp; · &nbsp; Financial services</div></div></div></div>
+    <div class="actions"><button id="reset" class="secondary">↻ Reset</button><button id="export">↓ Export JSON</button></div></div>
+  <div class="summary">
+    <div><span class="label">MARKET PRICE</span><strong id="market-price">—</strong><small>Closing 23 Oct 2026</small></div>
+    <div><span class="label">FAIR VALUE / BASE MODEL</span><strong class="accent" id="fair-value">—</strong><small>Justified price-to-book</small></div>
+    <div><span class="label">UPSIDE / DOWNSIDE</span><strong id="upside">—</strong><small id="valuation-label">—</small></div>
+    <div><span class="label">20% MARGIN OF SAFETY</span><strong id="mos">—</strong><small>Illustrative entry threshold</small></div>
+  </div>
+  <div class="columns" id="models">
+   <section class="panel"><div class="panelhead"><div><span class="eyebrow">MODEL OUTCOMES</span><h2>Three possible futures</h2><p>Compare scenarios or change any assumption.</p></div><span class="pill">BANK MODEL</span></div>
+    <div class="scenario-grid"><button data-scenario="bear"><span>↘ BEAR</span><strong id="bear-value">—</strong><small>Lower returns</small></button><button data-scenario="base" class="active"><span>◆ BASE</span><strong id="base-value">—</strong><small>Normalised</small></button><button data-scenario="bull"><span>↗ BULL</span><strong id="bull-value">—</strong><small>Stronger franchise</small></button></div>
+    <div class="bar-head"><span>Market vs model value</span><span><b class="legend-market"></b> Market &nbsp; <b class="legend-fair"></b> Fair value</span></div>
+    <div class="bar-row"><span>Market</span><div class="track"><div class="market-fill" id="market-bar"></div></div><b id="market-bar-label">—</b></div>
+    <div class="bar-row"><span>Model</span><div class="track"><div class="fair-fill" id="fair-bar"></div></div><b id="fair-bar-label">—</b></div>
+   </section>
+   <section class="panel"><div class="panelhead"><div><span class="eyebrow">ASSUMPTION ENGINE</span><h2>Build your own conviction</h2><p>Everything recalculates immediately.</p></div><span class="pill">✎ EDITABLE</span></div>
+    <div class="fields"><label>Normalised ROE <span>%</span><input id="roe" type="number" step=".25"></label><label>Cost of equity <span>%</span><input id="requiredReturn" type="number" step=".25"></label><label>Long-run book growth <span>%</span><input id="bookGrowth" type="number" step=".25"></label><label>Book value/share <span>S$</span><input id="bookValuePerShare" type="number" step=".01"></label><label>Market price <span>S$</span><input id="marketPriceInput" type="number" step=".01"></label></div>
+    <p class="formula">P/B = (ROE − growth) / (cost of equity − growth)<br>Value = P/B × book value per share</p><p id="form-error" class="error" role="alert" hidden></p>
+   </section>
+  </div>
+  <div class="columns">
+    <section class="panel"><div class="panelhead"><div><span class="eyebrow">INDEPENDENT CROSS-CHECK</span><h2>Dividend discount model</h2><p>Ordinary dividends plus finite capital returns.</p></div></div>
+      <div class="ddm-top"><strong id="ddm-total">—</strong><span id="ddm-compare" class="pill">—</span></div>
+      <div class="fields"><label>Ordinary quarterly dividend <span>S$</span><input id="ordinaryQuarterlyDividend" type="number" step=".01"></label><label>Capital return per quarter <span>S$</span><input id="capitalReturnQuarterly" type="number" step=".01"></label><label>Required return <span>%</span><input id="ddmRequiredReturn" type="number" step=".25"></label><label>Perpetual dividend growth <span>%</span><input id="dividendGrowth" type="number" step=".25"></label><label>Capital return quarters remaining <span>#</span><input id="remainingCapitalReturnQuarters" type="number" step="1"></label></div>
+      <div class="detailrow"><span>Ordinary dividend value</span><strong id="ddm-ordinary">—</strong></div><div class="detailrow"><span>Finite capital-return value</span><strong id="ddm-temporary">—</strong></div>
+      <p class="fine">Independent cross-check only. Do not add DDM and P/B together. Quarterly capital returns are not perpetual.</p>
+    </section>
+    <section class="panel"><div class="panelhead"><div><span class="eyebrow">ASSUMPTION RISK</span><h2>Sensitivity matrix</h2><p>Price per share for different ROE and cost of equity assumptions.</p></div></div>
+      <div class="scroll"><table id="sensitivity"><thead></thead><tbody></tbody></table></div><p class="fine">Rows vary ROE · columns vary required return. Highlighted centre is the current estimate.</p>
+    </section>
+  </div>
+  <div class="columns" id="fundamentals">
+    <section class="panel"><div class="panelhead"><div><span class="eyebrow">FINANCIAL SNAPSHOT · JUNE 2026</span><h2>DBS fundamentals</h2><p>Historical company disclosure, not a forecast.</p></div></div>
+      <div class="stats"><div><span>Annualised EPS</span><b id="eps">—</b></div><div><span>Reported ROE</span><b id="reported-roe">—</b></div><div><span>Market P/B</span><b id="pb-market">—</b></div><div><span>Ordinary dividend yield</span><b id="yield-ordinary">—</b></div><div><span>Headline annualised yield</span><b id="yield-headline">—</b></div><div><span>Fully phased CET1</span><b id="cet1">—</b></div><div><span>Liquidity coverage (LCR)</span><b id="lcr">—</b></div><div><span>Stable funding (NSFR)</span><b id="nsfr">—</b></div><div><span>Non-performing loans</span><b id="npl">—</b></div></div>
+    </section>
+    <section class="panel"><div class="panelhead"><div><span class="eyebrow">INVESTMENT THESIS</span><h2>What to watch</h2><p>Risks the model can't fully capture.</p></div></div>
+     <div class="thesis"><b class="positive">● &nbsp; Why DBS commands a premium</b><p>Strong franchise profitability, deposits, wealth management fees and regulatory capital buffers.</p></div>
+     <div class="thesis"><b class="warning">● &nbsp; What could impair the valuation</b><p>Lower sustainable ROE, margin compression, rising credit losses, funding stress or a higher equity discount rate.</p></div>
+     <div class="thesis"><b>● &nbsp; Capital returns are temporary</b><p>The extra S$0.15/quarter is a finite programme, not a permanent dividend. Test the ordinary dividend on its own.</p></div>
+     <div class="notice">Research software using a frozen market snapshot; not live market data, a price forecast or investment advice.</div>
+    </section>
+  </div>
+  <section id="sources" class="panel"><div class="panelhead"><div><span class="eyebrow">PROVENANCE</span><h2>Original sources</h2><p>Validate assumptions against the filings.</p></div></div><div id="source-list" class="sources"></div></section>
+  <footer>fairvalue · Transparent thinking, not price prediction.<span>DBS · 23 Oct 2026 snapshot</span></footer>
+ </div>
+</main></div></body></html>

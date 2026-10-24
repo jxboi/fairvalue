@@ -1,0 +1,15 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {stocks} from '../src/data.js';
+import {justifiedPriceToBook,dividendDiscountModel,computeMetrics,calculateSensitivity} from '../src/valuation.js';
+const d=stocks.DBS;
+test('snapshot is dated with documented sources',()=>{assert.equal(d.snapshotDate,'2026-10-23');assert.ok(d.sources.length>=3)});
+test('base valuation is approximately S$70.17',()=>assert.ok(Math.abs(computeMetrics(d,d.scenarios.base).fairValue-70.17)<0.1));
+test('bear < base < bull',()=>{const [a,b,c]=['bear','base','bull'].map(s=>computeMetrics(d,d.scenarios[s]).fairValue);assert.ok(a<b&&b<c)});
+test('value increases with ROE',()=>{const a={bookValue:25,roe:.15,requiredReturn:.08,growth:.03};assert.ok(justifiedPriceToBook({...a,roe:.17}).fairValue>justifiedPriceToBook(a).fairValue)});
+test('value falls with cost of equity',()=>{const a={bookValue:25,roe:.16,requiredReturn:.08,growth:.03};assert.ok(justifiedPriceToBook({...a,requiredReturn:.1}).fairValue<justifiedPriceToBook(a).fairValue)});
+test('P/B rejects invalid parameters',()=>{assert.throws(()=>justifiedPriceToBook({bookValue:0,roe:.16,requiredReturn:.08,growth:.03}),/positive/);assert.throws(()=>justifiedPriceToBook({bookValue:25,roe:.16,requiredReturn:.03,growth:.03}),/exceed/)});
+test('capital returns are finite and optional',()=>{const a={ordinaryAnnualDividend:2.64,requiredReturn:.08,growth:.04,capitalReturnQuarterly:.15,remainingQuarters:6};const m=dividendDiscountModel(a);assert.ok(m.temporary>0&&m.temporary<.9);assert.equal(dividendDiscountModel({...a,remainingQuarters:0}).temporary,0)});
+test('DDM rejects unsupported quarters and rate',()=>{assert.throws(()=>dividendDiscountModel({ordinaryAnnualDividend:2,requiredReturn:.08,growth:.04,remainingQuarters:1.4}),/integer/);assert.throws(()=>dividendDiscountModel({ordinaryAnnualDividend:2,requiredReturn:.04,growth:.04}),/exceed/)});
+test('sensitivity grid has 25 cells and base is central',()=>{const g=calculateSensitivity(d,d.scenarios.base);assert.equal(g.length,5);assert.ok(g.every(r=>r.length===5));assert.ok(Math.abs(g[2][2]-computeMetrics(d,d.scenarios.base).fairValue)<1e-8)});
+test('changing share price cannot change intrinsic value',()=>{assert.equal(computeMetrics({...d,marketPrice:100},d.scenarios.base).fairValue,computeMetrics({...d,marketPrice:50},d.scenarios.base).fairValue)});
