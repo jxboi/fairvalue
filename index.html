@@ -1,62 +1,206 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#080d16"><meta name="description" content="Fair value analysis of individual stocks. DBS first.">
-<title>FairValue — DBS Research</title><link rel="stylesheet" href="./src/styles.css"><script type="module" src="./src/app.js"></script></head>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f8f6">
+  <meta name="description" content="Transparent, assumption-driven fair value research for individual stocks. DBS Group Holdings first.">
+  <title>DBS Group Holdings | FairValue Research</title>
+  <link rel="stylesheet" href="./src/styles.css">
+  <script type="module" src="./src/app.js"></script>
+</head>
 <body>
-<div class="layout"><aside class="sidebar">
-  <a class="brand" href="#top"><span class="logo">f<span>.</span></span> fairvalue</a>
-  <p class="section-label">WORKSPACE</p>
-  <nav><a class="selected" href="#top">▣ &nbsp; Stock analysis</a><a href="#models">≋ &nbsp; Models</a><a href="#fundamentals">▤ &nbsp; Fundamentals</a><a href="#sources">↗ &nbsp; Sources</a></nav>
-  <p class="section-label">WATCHLIST <span class="subtle">01</span></p>
-  <div class="stock"><span class="stock-symbol">D</span><span><strong>DBS Group</strong><small>D05 · SGX</small></span><i></i></div>
-  <div class="soon">+ More stocks coming soon</div>
-  <div class="sidebar-foot"><b class="dot"></b> Local research workspace<small>Assumptions stay in your browser</small></div>
-</aside><main id="top">
-  <div class="topbar"><span>Workspace <em>/</em> Stock analysis <em>/</em> DBS</span><span class="status"><b class="dot"></b> Snapshot · 23 Oct 2026</span></div>
-  <div class="body">
-  <div class="heading"><div><span class="eyebrow">EQUITY RESEARCH &nbsp; / &nbsp; BANKS</span><div class="company"><div class="company-icon">DBS</div><div><h1>DBS Group Holdings</h1><div class="subtle">SGX: D05 &nbsp; · &nbsp; Singapore &nbsp; · &nbsp; Financial services</div></div></div></div>
-    <div class="actions"><button id="reset" class="secondary">↻ Reset</button><button id="export">↓ Export JSON</button></div></div>
-  <div class="summary">
-    <div><span class="label">MARKET PRICE</span><strong id="market-price">—</strong><small>Closing 23 Oct 2026</small></div>
-    <div><span class="label">FAIR VALUE / BASE MODEL</span><strong class="accent" id="fair-value">—</strong><small>Justified price-to-book</small></div>
-    <div><span class="label">UPSIDE / DOWNSIDE</span><strong id="upside">—</strong><small id="valuation-label">—</small></div>
-    <div><span class="label">20% MARGIN OF SAFETY</span><strong id="mos">—</strong><small>Illustrative entry threshold</small></div>
+<a class="skip-link" href="#main">Skip to analysis</a>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="wordmark" href="#main" aria-label="FairValue home"><span class="wordmark-mark">fv<span>.</span></span><span>FairValue</span></a>
+    <nav class="primary-nav" aria-label="Research sections">
+      <a href="#valuation">Valuation</a>
+      <a href="#models">Models</a>
+      <a href="#financials">Financials</a>
+      <a href="#research">Research</a>
+    </nav>
+    <span class="header-context">Single-stock research <span class="header-dot"></span> D05 · SGX</span>
   </div>
-  <div class="columns" id="models">
-   <section class="panel"><div class="panelhead"><div><span class="eyebrow">MODEL OUTCOMES</span><h2>Three possible futures</h2><p>Compare scenarios or change any assumption.</p></div><span class="pill">BANK MODEL</span></div>
-    <div class="scenario-grid"><button data-scenario="bear"><span>↘ BEAR</span><strong id="bear-value">—</strong><small>Lower returns</small></button><button data-scenario="base" class="active"><span>◆ BASE</span><strong id="base-value">—</strong><small>Normalised</small></button><button data-scenario="bull"><span>↗ BULL</span><strong id="bull-value">—</strong><small>Stronger franchise</small></button></div>
-    <div class="bar-head"><span>Market vs model value</span><span><b class="legend-market"></b> Market &nbsp; <b class="legend-fair"></b> Fair value</span></div>
-    <div class="bar-row"><span>Market</span><div class="track"><div class="market-fill" id="market-bar"></div></div><b id="market-bar-label">—</b></div>
-    <div class="bar-row"><span>Model</span><div class="track"><div class="fair-fill" id="fair-bar"></div></div><b id="fair-bar-label">—</b></div>
-   </section>
-   <section class="panel"><div class="panelhead"><div><span class="eyebrow">ASSUMPTION ENGINE</span><h2>Build your own conviction</h2><p>Everything recalculates immediately.</p></div><span class="pill">✎ EDITABLE</span></div>
-    <div class="fields"><label>Normalised ROE <span>%</span><input id="roe" type="number" step=".25"></label><label>Cost of equity <span>%</span><input id="requiredReturn" type="number" step=".25"></label><label>Long-run book growth <span>%</span><input id="bookGrowth" type="number" step=".25"></label><label>Book value/share <span>S$</span><input id="bookValuePerShare" type="number" step=".01"></label><label>Market price <span>S$</span><input id="marketPriceInput" type="number" step=".01"></label></div>
-    <p class="formula">P/B = (ROE − growth) / (cost of equity − growth)<br>Value = P/B × book value per share</p><p id="form-error" class="error" role="alert" hidden></p>
-   </section>
+</header>
+<main id="main" class="page">
+  <div class="page-intro">
+    <div>
+      <p class="overline">EQUITY RESEARCH <span aria-hidden="true">/</span> SINGAPORE BANKS</p>
+      <h1>DBS Group Holdings</h1>
+      <p class="instrument">D05 <span aria-hidden="true">·</span> SGX <span aria-hidden="true">·</span> Banking & financial services</p>
+    </div>
+    <div class="toolbar" aria-label="Analysis actions">
+      <button class="button button-plain" id="reset" type="button">Reset assumptions</button>
+      <button class="button button-dark" id="export" type="button">Export analysis <span aria-hidden="true">↗</span></button>
+    </div>
   </div>
-  <div class="columns">
-    <section class="panel"><div class="panelhead"><div><span class="eyebrow">INDEPENDENT CROSS-CHECK</span><h2>Dividend discount model</h2><p>Ordinary dividends plus finite capital returns.</p></div></div>
-      <div class="ddm-top"><strong id="ddm-total">—</strong><span id="ddm-compare" class="pill">—</span></div>
-      <div class="fields"><label>Ordinary quarterly dividend <span>S$</span><input id="ordinaryQuarterlyDividend" type="number" step=".01"></label><label>Capital return per quarter <span>S$</span><input id="capitalReturnQuarterly" type="number" step=".01"></label><label>Required return <span>%</span><input id="ddmRequiredReturn" type="number" step=".25"></label><label>Perpetual dividend growth <span>%</span><input id="dividendGrowth" type="number" step=".25"></label><label>Capital return quarters remaining <span>#</span><input id="remainingCapitalReturnQuarters" type="number" step="1"></label></div>
-      <div class="detailrow"><span>Ordinary dividend value</span><strong id="ddm-ordinary">—</strong></div><div class="detailrow"><span>Finite capital-return value</span><strong id="ddm-temporary">—</strong></div>
-      <p class="fine">Independent cross-check only. Do not add DDM and P/B together. Quarterly capital returns are not perpetual.</p>
-    </section>
-    <section class="panel"><div class="panelhead"><div><span class="eyebrow">ASSUMPTION RISK</span><h2>Sensitivity matrix</h2><p>Price per share for different ROE and cost of equity assumptions.</p></div></div>
-      <div class="scroll"><table id="sensitivity"><thead></thead><tbody></tbody></table></div><p class="fine">Rows vary ROE · columns vary required return. Highlighted centre is the current estimate.</p>
-    </section>
-  </div>
-  <div class="columns" id="fundamentals">
-    <section class="panel"><div class="panelhead"><div><span class="eyebrow">FINANCIAL SNAPSHOT · JUNE 2026</span><h2>DBS fundamentals</h2><p>Historical company disclosure, not a forecast.</p></div></div>
-      <div class="stats"><div><span>Annualised EPS</span><b id="eps">—</b></div><div><span>Reported ROE</span><b id="reported-roe">—</b></div><div><span>Market P/B</span><b id="pb-market">—</b></div><div><span>Ordinary dividend yield</span><b id="yield-ordinary">—</b></div><div><span>Headline annualised yield</span><b id="yield-headline">—</b></div><div><span>Fully phased CET1</span><b id="cet1">—</b></div><div><span>Liquidity coverage (LCR)</span><b id="lcr">—</b></div><div><span>Stable funding (NSFR)</span><b id="nsfr">—</b></div><div><span>Non-performing loans</span><b id="npl">—</b></div></div>
-    </section>
-    <section class="panel"><div class="panelhead"><div><span class="eyebrow">INVESTMENT THESIS</span><h2>What to watch</h2><p>Risks the model can't fully capture.</p></div></div>
-     <div class="thesis"><b class="positive">● &nbsp; Why DBS commands a premium</b><p>Strong franchise profitability, deposits, wealth management fees and regulatory capital buffers.</p></div>
-     <div class="thesis"><b class="warning">● &nbsp; What could impair the valuation</b><p>Lower sustainable ROE, margin compression, rising credit losses, funding stress or a higher equity discount rate.</p></div>
-     <div class="thesis"><b>● &nbsp; Capital returns are temporary</b><p>The extra S$0.15/quarter is a finite programme, not a permanent dividend. Test the ordinary dividend on its own.</p></div>
-     <div class="notice">Research software using a frozen market snapshot; not live market data, a price forecast or investment advice.</div>
-    </section>
-  </div>
-  <section id="sources" class="panel"><div class="panelhead"><div><span class="eyebrow">PROVENANCE</span><h2>Original sources</h2><p>Validate assumptions against the filings.</p></div></div><div id="source-list" class="sources"></div></section>
-  <footer>fairvalue · Transparent thinking, not price prediction.<span>DBS · 23 Oct 2026 snapshot</span></footer>
- </div>
-</main></div></body></html>
+  <div class="dateline"><span class="dateline-indicator" aria-hidden="true"></span> Market close: <strong>23 October 2026</strong><span class="dateline-separator">·</span> Financials: <strong>30 June 2026</strong><span class="dateline-separator">·</span> <strong>Historical snapshot, not live data</strong></div>
+
+  <section id="valuation" class="lead-section" aria-labelledby="valuation-heading">
+    <div class="section-heading lead-heading">
+      <div>
+        <p class="kicker">01 / VALUATION</p>
+        <h2 id="valuation-heading">Estimated intrinsic value</h2>
+      </div>
+      <span class="method-note">Justified price-to-book model</span>
+    </div>
+    <div class="valuation-overview">
+      <div class="lead-number">
+        <p class="stat-title">FAIR VALUE PER SHARE</p>
+        <output id="fair-value" class="fair-value" aria-live="polite">—</output>
+        <p class="value-footnote">Model estimate, not a price target</p>
+      </div>
+      <div class="lead-secondary">
+        <div class="key-metric">
+          <span>Market price</span>
+          <strong id="market-price">—</strong>
+          <small>23 Oct 2026 close</small>
+        </div>
+        <div class="key-metric">
+          <span>Potential upside / downside</span>
+          <strong id="upside">—</strong>
+          <small id="valuation-label">—</small>
+        </div>
+        <div class="key-metric">
+          <span>20% margin-of-safety entry</span>
+          <strong id="mos">—</strong>
+          <small>80% of model value</small>
+        </div>
+      </div>
+    </div>
+    <div class="valuation-visual">
+      <div class="visual-heading">
+        <span>Bear–bull valuation range</span>
+        <span class="visual-legend"><i class="fair-legend"></i> Selected value <i class="market-legend"></i> Market price</span>
+      </div>
+      <div class="range-axis" id="valuation-range" role="img" aria-label="Estimated valuation range compared with the market price">
+        <div class="range-track"><span id="range-band" class="range-band"></span><span id="value-marker" class="value-marker"></span><span id="price-marker" class="price-marker"></span></div>
+        <div class="range-caption"><span id="range-low">—</span><span id="range-high">—</span></div>
+      </div>
+      <p id="comparison-copy" class="visual-context">A range of assumptions matters more than a single number.</p>
+    </div>
+  </section>
+
+  <section id="models" class="content-section" aria-labelledby="models-heading">
+    <div class="section-heading">
+      <div><p class="kicker">02 / ASSUMPTIONS</p><h2 id="models-heading">Valuation model</h2></div>
+      <p class="section-description">Select a case or edit the assumptions to see the result.</p>
+    </div>
+    <div class="model-layout">
+      <div class="scenario-pane">
+        <h3 class="subheading">Scenarios <span id="scenario-status" class="subtle-label">Base case</span></h3>
+        <div class="scenario-selector" role="group" aria-label="Valuation scenarios">
+          <button type="button" data-scenario="bear" aria-pressed="false"><span>Bear</span><strong id="bear-value">—</strong><small>Lower profitability</small></button>
+          <button type="button" data-scenario="base" aria-pressed="true"><span>Base</span><strong id="base-value">—</strong><small>Normalised returns</small></button>
+          <button type="button" data-scenario="bull" aria-pressed="false"><span>Bull</span><strong id="bull-value">—</strong><small>Higher profitability</small></button>
+        </div>
+        <div class="model-explanation">
+          <p class="math-label">VALUATION METHOD</p>
+          <p class="equation">Value = Book value × (ROE − g) / (Ke − g)</p>
+          <p>ROE is sustainable return on equity, Ke is your required equity return, and g is long-run growth. The result is sensitive to each input, especially the gap between Ke and g.</p>
+        </div>
+      </div>
+      <div class="assumptions-pane">
+        <h3 class="subheading">Key assumptions <span class="subtle-label">Editable</span></h3>
+        <div class="input-grid">
+          <label for="roe">Normalised ROE <span class="input-unit">%</span><input id="roe" type="number" inputmode="decimal" step="0.25" min="0" max="40"></label>
+          <label for="requiredReturn">Cost of equity <span class="input-unit">%</span><input id="requiredReturn" type="number" inputmode="decimal" step="0.25" min="0.1" max="40"></label>
+          <label for="bookGrowth">Long-run growth <span class="input-unit">%</span><input id="bookGrowth" type="number" inputmode="decimal" step="0.25" min="-20" max="20"></label>
+        </div>
+        <details class="disclosure">
+          <summary>Additional bank inputs <span>Market price & book value</span></summary>
+          <div class="input-grid disclosure-fields">
+            <label for="bookValuePerShare">Book value / share <span class="input-unit">S$</span><input id="bookValuePerShare" type="number" inputmode="decimal" step="0.01" min="0.01"></label>
+            <label for="marketPriceInput">Market price <span class="input-unit">S$</span><input id="marketPriceInput" type="number" inputmode="decimal" step="0.01" min="0.01"></label>
+          </div>
+        </details>
+        <p id="form-error" class="form-error" role="alert" hidden></p>
+        <p id="edit-note" class="assumption-note" aria-live="polite">Default assumptions based on the base case.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section" aria-labelledby="crosscheck-heading">
+    <div class="section-heading">
+      <div><p class="kicker">03 / CROSS-CHECK</p><h2 id="crosscheck-heading">Dividend-based valuation</h2></div>
+      <p class="section-description">Independent method · not added to the P/B value</p>
+    </div>
+    <div class="crosscheck-layout">
+      <div class="dividend-result">
+        <span class="stat-title">DIVIDEND MODEL VALUE</span>
+        <output id="ddm-total" class="ddm-value">—</output>
+        <p id="ddm-compare" class="relative-value">—</p>
+        <dl class="detail-list">
+          <div><dt>Ordinary dividend value</dt><dd id="ddm-ordinary">—</dd></div>
+          <div><dt>Finite capital-return value</dt><dd id="ddm-temporary">—</dd></div>
+        </dl>
+        <p class="footnote">The S$0.15 quarterly capital-return dividend is modelled for a limited period, not forever.</p>
+      </div>
+      <div class="ddm-input-pane">
+        <details class="disclosure dividend-details">
+          <summary>Edit dividend assumptions <span>Optional</span></summary>
+          <div class="input-grid disclosure-fields">
+            <label for="ordinaryQuarterlyDividend">Ordinary dividend / quarter <span class="input-unit">S$</span><input id="ordinaryQuarterlyDividend" type="number" inputmode="decimal" min="0" step="0.01"></label>
+            <label for="capitalReturnQuarterly">Capital return / quarter <span class="input-unit">S$</span><input id="capitalReturnQuarterly" type="number" inputmode="decimal" min="0" step="0.01"></label>
+            <label for="ddmRequiredReturn">Dividend required return <span class="input-unit">%</span><input id="ddmRequiredReturn" type="number" inputmode="decimal" step="0.25"></label>
+            <label for="dividendGrowth">Dividend growth <span class="input-unit">%</span><input id="dividendGrowth" type="number" inputmode="decimal" step="0.25"></label>
+            <label for="remainingCapitalReturnQuarters">Capital-return quarters left <span class="input-unit">#</span><input id="remainingCapitalReturnQuarters" type="number" inputmode="numeric" min="0" max="40" step="1"></label>
+          </div>
+        </details>
+        <p class="crosscheck-note">Dividend-model estimates depend heavily on future growth and required returns. Always compare the result with the book-value approach.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section" aria-labelledby="sensitivity-heading">
+    <div class="section-heading">
+      <div><p class="kicker">04 / RISK ANALYSIS</p><h2 id="sensitivity-heading">Valuation sensitivity</h2></div>
+      <p class="section-description">Change in S$ per share when ROE and cost of equity vary.</p>
+    </div>
+    <div class="table-scroll" role="region" aria-label="Sensitivity analysis table" tabindex="0">
+      <table id="sensitivity" class="sensitivity-table"><caption>Rows: change in ROE. Columns: change in cost of equity. Current case highlighted.</caption><thead></thead><tbody></tbody></table>
+    </div>
+    <p class="footnote">Values in S$. Green means higher than the selected market price; terracotta means lower. These are estimates, not probabilities.</p>
+  </section>
+
+  <section id="financials" class="content-section" aria-labelledby="financials-heading">
+    <div class="section-heading">
+      <div><p class="kicker">05 / FUNDAMENTALS</p><h2 id="financials-heading">Financial health at a glance</h2></div>
+      <p class="section-description">Reported through 30 June 2026 · frozen source data</p>
+    </div>
+    <dl class="fundamentals-grid">
+      <div><dt>Annualised EPS</dt><dd id="eps">—</dd></div>
+      <div><dt>Reported ROE</dt><dd id="reported-roe">—</dd></div>
+      <div><dt>Market price / book</dt><dd id="pb-market">—</dd></div>
+      <div><dt>Ordinary dividend yield</dt><dd id="yield-ordinary">—</dd></div>
+      <div><dt>Yield incl. capital return</dt><dd id="yield-headline">—</dd></div>
+      <div><dt>Fully phased CET1</dt><dd id="cet1">—</dd></div>
+      <div><dt>Liquidity coverage</dt><dd id="lcr">—</dd></div>
+      <div><dt>Net stable funding</dt><dd id="nsfr">—</dd></div>
+      <div><dt>Non-performing loans</dt><dd id="npl">—</dd></div>
+    </dl>
+  </section>
+
+  <section id="research" class="content-section" aria-labelledby="research-heading">
+    <div class="section-heading">
+      <div><p class="kicker">06 / INVESTMENT RESEARCH</p><h2 id="research-heading">What could change the result?</h2></div>
+    </div>
+    <div class="research-list">
+      <article><span class="research-index">01</span><div><h3>Why the market pays a premium</h3><p>DBS has historically generated strong returns on equity, supported by its deposit base and wealth-management business. The estimate assumes a material portion of that profitability persists.</p></div></article>
+      <article><span class="research-index">02</span><div><h3>What would invalidate the base case</h3><p>Structurally lower ROE, sustained net-interest margin compression, rising credit costs, or a higher required equity return would reduce estimated value.</p></div></article>
+      <article><span class="research-index">03</span><div><h3>Capital return is not recurring income</h3><p>The additional quarterly dividend distributes accumulated excess capital. It should not be treated as a permanent component of ordinary dividend growth.</p></div></article>
+    </div>
+  </section>
+
+  <section id="sources" class="content-section source-section" aria-labelledby="sources-heading">
+    <div class="section-heading">
+      <div><p class="kicker">07 / SOURCES</p><h2 id="sources-heading">Underlying disclosures</h2></div>
+      <p class="section-description">Review company filings before relying on the figures.</p>
+    </div>
+    <ol id="source-list" class="source-list"></ol>
+  </section>
+  <footer class="page-footer"><span>FairValue · Explainable stock analysis</span><span>For research, not investment advice. Prices and financials are not live.</span></footer>
+</main>
+</body>
+</html>
