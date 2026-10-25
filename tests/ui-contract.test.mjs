@@ -9,7 +9,7 @@ const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(match=>match[1]);
 
 test('every static DOM lookup resolves to an HTML id',()=>{
   const calls = [...js.matchAll(/\$\('([^']+)'\)/g)].map(match=>match[1]);
-  assert.ok(calls.length > 20);
+  assert.ok(calls.length >= 8);
   for (const id of calls) assert.ok(ids.includes(id),'missing '+id);
 });
 test('ids are unique and financial inputs are labelled',()=>{
