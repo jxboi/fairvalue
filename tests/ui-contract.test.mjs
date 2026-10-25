@@ -42,3 +42,15 @@ test('frozen-data disclosure remains visible',()=>{
   assert.match(html,/Historical snapshot, not live data/);
   assert.match(html,/not investment advice/);
 });
+
+test('peer comparison navigation, table and switcher remain accessible',()=>{
+  assert.ok(html.includes('href="#comparison"'));
+  assert.ok(html.includes('id="comparison"'));
+  assert.ok(html.includes('id="bank-comparison-body"'));
+  assert.ok(html.includes('id="company-name"'));
+  assert.ok(html.includes('id="ordinaryAnnualDividend"'));
+  assert.ok(js.includes("aria-pressed"));
+  assert.ok(js.includes('stocks,bankIds'));
+  assert.match(css,/\.peer-table/);
+  assert.match(css,/position:sticky/);
+});

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f7f8f6">
   <meta name="description" content="Transparent, assumption-driven fair value research for individual stocks. DBS Group Holdings first.">
-  <title>DBS Group Holdings | FairValue Research</title>
+  <title>Singapore bank comparison | FairValue Research</title>
   <link rel="stylesheet" href="./src/styles.css">
   <script type="module" src="./src/app.js"></script>
 </head>
@@ -16,26 +16,27 @@
     <a class="wordmark" href="#main" aria-label="FairValue home"><span class="wordmark-mark">fv<span>.</span></span><span>FairValue</span></a>
     <nav class="primary-nav" aria-label="Research sections">
       <a href="#valuation">Valuation</a>
+      <a href="#comparison">Compare banks</a>
       <a href="#models">Models</a>
       <a href="#financials">Financials</a>
       <a href="#research">Research</a>
     </nav>
-    <span class="header-context">Single-stock research <span class="header-dot"></span> D05 · SGX</span>
+    <span class="header-context">Single-stock research <span class="header-dot"></span> <span id="header-ticker">D05</span> · SGX</span>
   </div>
 </header>
 <main id="main" class="page">
   <div class="page-intro">
     <div>
       <p class="overline">EQUITY RESEARCH <span aria-hidden="true">/</span> SINGAPORE BANKS</p>
-      <h1>DBS Group Holdings</h1>
-      <p class="instrument">D05 <span aria-hidden="true">·</span> SGX <span aria-hidden="true">·</span> Banking & financial services</p>
+      <h1 id="company-name">DBS Group Holdings</h1>
+      <p class="instrument"><span id="company-ticker">D05</span> <span aria-hidden="true">·</span> SGX <span aria-hidden="true">·</span> Banking & financial services</p>
     </div>
     <div class="toolbar" aria-label="Analysis actions">
       <button class="button button-plain" id="reset" type="button">Reset assumptions</button>
       <button class="button button-dark" id="export" type="button">Export analysis <span aria-hidden="true">↗</span></button>
     </div>
   </div>
-  <div class="dateline"><span class="dateline-indicator" aria-hidden="true"></span> Market close: <strong>23 October 2026</strong><span class="dateline-separator">·</span> Financials: <strong>30 June 2026</strong><span class="dateline-separator">·</span> <strong>Historical snapshot, not live data</strong></div>
+  <div class="dateline"><span class="dateline-indicator" aria-hidden="true"></span> Market close: <strong id="market-date">23 October 2026</strong><span class="dateline-separator">·</span> Financials: <strong id="results-date">30 June 2026</strong><span class="dateline-separator">·</span> <strong>Historical snapshot, not live data</strong></div>
 
   <section id="valuation" class="lead-section" aria-labelledby="valuation-heading">
     <div class="section-heading lead-heading">
@@ -49,7 +50,7 @@
       <div class="lead-number">
         <p class="stat-title">FAIR VALUE PER SHARE</p>
         <output id="fair-value" class="fair-value" aria-live="polite">—</output>
-        <p class="value-footnote">Model estimate, not a price target</p>
+        <p class="value-footnote">Model estimate, not an analyst price target</p>
       </div>
       <div class="lead-secondary">
         <div class="key-metric">
@@ -82,9 +83,32 @@
     </div>
   </section>
 
+  <section id="comparison" class="content-section comparison-section" aria-labelledby="comparison-heading">
+    <div class="section-heading">
+      <div><p class="kicker">02 / PEER COMPARISON</p><h2 id="comparison-heading">Singapore's three listed banks</h2></div>
+      <p class="section-description">Select a bank to open its independent valuation model.</p>
+    </div>
+    <div class="table-scroll comparison-scroll" role="region" aria-label="Comparison of DBS, OCBC and UOB" tabindex="0">
+      <table id="bank-comparison" class="peer-table">
+        <caption>DBS, OCBC and UOB at 23 October 2026 market close and June 2026 financial reporting.</caption>
+        <thead><tr>
+          <th scope="col">Bank</th><th scope="col">Share price</th><th scope="col">P/B</th>
+          <th scope="col">ROE</th><th scope="col">Ordinary yield¹</th><th scope="col">Model value²</th>
+          <th scope="col">Model upside²</th><th scope="col">CET1³</th>
+        </tr></thead>
+        <tbody id="bank-comparison-body"></tbody>
+      </table>
+    </div>
+    <div class="comparison-notes">
+      <p>¹ Ordinary dividend yield annualises each bank's latest declared payment and excludes special/capital-return dividends. It is not a forecast.</p>
+      <p>² Fair values and upside are illustrative, using bank-specific normalised ROE, discount rates and growth assumptions. Compare those inputs, not just the percentage upside.</p>
+      <p>³ CET1 is the reported transitional ratio; fully phased-in ratios differ. Financials through 30 June 2026. Prices at 23 October 2026. Neither figures nor valuations are live.</p>
+    </div>
+  </section>
+
   <section id="models" class="content-section" aria-labelledby="models-heading">
     <div class="section-heading">
-      <div><p class="kicker">02 / ASSUMPTIONS</p><h2 id="models-heading">Valuation model</h2></div>
+      <div><p class="kicker">03 / ASSUMPTIONS</p><h2 id="models-heading">Valuation model</h2></div>
       <p class="section-description">Select a case or edit the assumptions to see the result.</p>
     </div>
     <div class="model-layout">
@@ -123,7 +147,7 @@
 
   <section class="content-section" aria-labelledby="crosscheck-heading">
     <div class="section-heading">
-      <div><p class="kicker">03 / CROSS-CHECK</p><h2 id="crosscheck-heading">Dividend-based valuation</h2></div>
+      <div><p class="kicker">04 / CROSS-CHECK</p><h2 id="crosscheck-heading">Dividend-based valuation</h2></div>
       <p class="section-description">Independent method · not added to the P/B value</p>
     </div>
     <div class="crosscheck-layout">
@@ -135,13 +159,13 @@
           <div><dt>Ordinary dividend value</dt><dd id="ddm-ordinary">—</dd></div>
           <div><dt>Finite capital-return value</dt><dd id="ddm-temporary">—</dd></div>
         </dl>
-        <p class="footnote">The S$0.15 quarterly capital-return dividend is modelled for a limited period, not forever.</p>
+        <p class="footnote"><span id="capital-note">DBS capital return is finite and separate from ordinary dividends.</span></p>
       </div>
       <div class="ddm-input-pane">
         <details class="disclosure dividend-details">
           <summary>Edit dividend assumptions <span>Optional</span></summary>
           <div class="input-grid disclosure-fields">
-            <label for="ordinaryQuarterlyDividend">Ordinary dividend / quarter <span class="input-unit">S$</span><input id="ordinaryQuarterlyDividend" type="number" inputmode="decimal" min="0" step="0.01"></label>
+            <label for="ordinaryAnnualDividend">Ordinary dividend / year¹ <span class="input-unit">S$</span><input id="ordinaryAnnualDividend" type="number" inputmode="decimal" min="0" step="0.01"></label>
             <label for="capitalReturnQuarterly">Capital return / quarter <span class="input-unit">S$</span><input id="capitalReturnQuarterly" type="number" inputmode="decimal" min="0" step="0.01"></label>
             <label for="ddmRequiredReturn">Dividend required return <span class="input-unit">%</span><input id="ddmRequiredReturn" type="number" inputmode="decimal" step="0.25"></label>
             <label for="dividendGrowth">Dividend growth <span class="input-unit">%</span><input id="dividendGrowth" type="number" inputmode="decimal" step="0.25"></label>
@@ -155,7 +179,7 @@
 
   <section class="content-section" aria-labelledby="sensitivity-heading">
     <div class="section-heading">
-      <div><p class="kicker">04 / RISK ANALYSIS</p><h2 id="sensitivity-heading">Valuation sensitivity</h2></div>
+      <div><p class="kicker">05 / RISK ANALYSIS</p><h2 id="sensitivity-heading">Valuation sensitivity</h2></div>
       <p class="section-description">Change in S$ per share when ROE and cost of equity vary.</p>
     </div>
     <div class="table-scroll" role="region" aria-label="Sensitivity analysis table" tabindex="0">
@@ -166,7 +190,7 @@
 
   <section id="financials" class="content-section" aria-labelledby="financials-heading">
     <div class="section-heading">
-      <div><p class="kicker">05 / FUNDAMENTALS</p><h2 id="financials-heading">Financial health at a glance</h2></div>
+      <div><p class="kicker">06 / FUNDAMENTALS</p><h2 id="financials-heading">Financial health at a glance</h2></div>
       <p class="section-description">Reported through 30 June 2026 · frozen source data</p>
     </div>
     <dl class="fundamentals-grid">
@@ -175,7 +199,7 @@
       <div><dt>Market price / book</dt><dd id="pb-market">—</dd></div>
       <div><dt>Ordinary dividend yield</dt><dd id="yield-ordinary">—</dd></div>
       <div><dt>Yield incl. capital return</dt><dd id="yield-headline">—</dd></div>
-      <div><dt>Fully phased CET1</dt><dd id="cet1">—</dd></div>
+      <div><dt>CET1 (reported)³</dt><dd id="cet1">—</dd></div><div><dt>CET1 (fully phased)</dt><dd id="cet1-fully-phased">—</dd></div>
       <div><dt>Liquidity coverage</dt><dd id="lcr">—</dd></div>
       <div><dt>Net stable funding</dt><dd id="nsfr">—</dd></div>
       <div><dt>Non-performing loans</dt><dd id="npl">—</dd></div>
@@ -184,18 +208,18 @@
 
   <section id="research" class="content-section" aria-labelledby="research-heading">
     <div class="section-heading">
-      <div><p class="kicker">06 / INVESTMENT RESEARCH</p><h2 id="research-heading">What could change the result?</h2></div>
+      <div><p class="kicker">07 / INVESTMENT RESEARCH</p><h2 id="research-heading">What could change the result?</h2></div>
     </div>
     <div class="research-list">
-      <article><span class="research-index">01</span><div><h3>Why the market pays a premium</h3><p>DBS has historically generated strong returns on equity, supported by its deposit base and wealth-management business. The estimate assumes a material portion of that profitability persists.</p></div></article>
-      <article><span class="research-index">02</span><div><h3>What would invalidate the base case</h3><p>Structurally lower ROE, sustained net-interest margin compression, rising credit costs, or a higher required equity return would reduce estimated value.</p></div></article>
-      <article><span class="research-index">03</span><div><h3>Capital return is not recurring income</h3><p>The additional quarterly dividend distributes accumulated excess capital. It should not be treated as a permanent component of ordinary dividend growth.</p></div></article>
+      <article><span class="research-index">01</span><div><h3>Business strengths</h3><p id="research-strength">DBS bank profitability and deposit franchise.</p></div></article>
+      <article><span class="research-index">02</span><div><h3>Key valuation risks</h3><p id="research-risk">Lower returns or higher cost of equity.</p></div></article>
+      <article><span class="research-index">03</span><div><h3>One-off shareholder distributions</h3><p id="research-special">Special dividends should not be assumed perpetual.</p></div></article>
     </div>
   </section>
 
   <section id="sources" class="content-section source-section" aria-labelledby="sources-heading">
     <div class="section-heading">
-      <div><p class="kicker">07 / SOURCES</p><h2 id="sources-heading">Underlying disclosures</h2></div>
+      <div><p class="kicker">08 / SOURCES</p><h2 id="sources-heading">Underlying disclosures</h2></div>
       <p class="section-description">Review company filings before relying on the figures.</p>
     </div>
     <ol id="source-list" class="source-list"></ol>

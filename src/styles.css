@@ -205,3 +205,30 @@ h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(32px,3.3vw,44px);
  .key-metric strong{font-size:21px}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important}}
+
+/* Peer comparison: information-first table, not decorative dashboard cards. */
+.comparison-section { scroll-margin-top: 90px; }
+.comparison-scroll { overscroll-behavior-inline:contain; }
+.peer-table { width:100%;min-width:875px;border-collapse:separate;border-spacing:0;text-align:right;font-variant-numeric:tabular-nums; }
+.peer-table caption { position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap; }
+.peer-table th,.peer-table td { padding:17px 12px;border-bottom:1px solid var(--line);white-space:nowrap;font-size:13px; }
+.peer-table thead th { background:#f0f4f3;font-weight:700;color:#5b6d76; }
+.peer-table th:first-child,.peer-table td:first-child { text-align:left;padding-left:18px; }
+.peer-table tbody tr:last-child td { border-bottom:0; }
+.peer-table tbody tr.is-selected { background:#eef4f1; }
+.peer-table tbody td:first-child { position:sticky;left:0;background:#fff;box-shadow:1px 0 #e3e9e7; }
+.peer-table tbody tr.is-selected td:first-child { background:#eef4f1; }
+.peer-table thead th:first-child { position:sticky;left:0;z-index:1;background:#f0f4f3;box-shadow:1px 0 #dae4e0; }
+.peer-bank-button { border:0;background:none;padding:0;text-align:left;color:#1e3741;font-weight:760;font-size:14px;min-height:42px;display:flex;align-items:center;gap:9px;cursor:pointer; }
+.peer-bank-button:hover { color:var(--accent);text-decoration:underline;text-underline-offset:4px; }
+.peer-bank-button[aria-pressed="true"]:before { content:"";width:4px;height:19px;background:var(--accent);display:inline-block;border-radius:2px; }
+.peer-symbol { color:#738590;font-size:12px;font-weight:500;display:block; }
+.peer-table td.model-upside-positive { color:var(--green);font-weight:720; }
+.peer-table td.model-upside-negative { color:var(--red);font-weight:720; }
+.comparison-notes { margin-top:14px;display:grid;gap:5px; }
+.comparison-notes p { font-size:12px;color:#6c808b;line-height:1.65;margin:0; }
+@media(max-width:760px) {
+ .peer-table th,.peer-table td {padding:13px 12px;}
+ .peer-bank-button {font-size:13px;}
+ .comparison-notes p {font-size:12px;}
+}

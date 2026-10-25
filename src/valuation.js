@@ -1,6 +1,6 @@
 /**
- * Pure bank valuation utilities. Per-share inputs are in the same currency.
- * Required returns, growth and ROE are decimal fractions, not percentages.
+ * Pure banking equity valuation. Share price/book value/dividends in the same currency.
+ * Model ROE, long-term growth and cost of equity as decimal fractions.
  */
 const finite = n => typeof n === 'number' && Number.isFinite(n);
 export function justifiedPriceToBook({bookValue,roe,requiredReturn,growth}) {
@@ -23,9 +23,12 @@ export function dividendDiscountModel({ordinaryAnnualDividend,requiredReturn,gro
   return {ordinary,temporary,fairValue:ordinary+temporary};
 }
 export function computeMetrics(data,a) {
+  const ordinaryAnnualDividend = data.ordinaryAnnualDividend ?? data.ordinaryQuarterlyDividend*4;
+  const capitalReturnQuarterly = data.capitalReturnQuarterly ?? 0;
+  if (!finite(data.marketPrice) || data.marketPrice<=0) throw new Error('Market price must be positive');
   const pb=justifiedPriceToBook({bookValue:data.bookValuePerShare,roe:a.roe/100,requiredReturn:a.requiredReturn/100,growth:a.bookGrowth/100});
-  const ddm=dividendDiscountModel({ordinaryAnnualDividend:data.ordinaryQuarterlyDividend*4,requiredReturn:a.ddmRequiredReturn/100,growth:a.dividendGrowth/100,capitalReturnQuarterly:data.capitalReturnQuarterly,remainingQuarters:a.remainingCapitalReturnQuarters});
-  return {...pb,ddm,upsidePct:(pb.fairValue/data.marketPrice-1)*100,priceToBook:data.marketPrice/data.bookValuePerShare,ordinaryYieldPct:4*data.ordinaryQuarterlyDividend/data.marketPrice*100,headlineYieldPct:4*(data.ordinaryQuarterlyDividend+data.capitalReturnQuarterly)/data.marketPrice*100,marginOfSafety20:0.8*pb.fairValue};
+  const ddm=dividendDiscountModel({ordinaryAnnualDividend,requiredReturn:a.ddmRequiredReturn/100,growth:a.dividendGrowth/100,capitalReturnQuarterly,remainingQuarters:a.remainingCapitalReturnQuarters});
+  return {...pb,ddm,upsidePct:(pb.fairValue/data.marketPrice-1)*100,priceToBook:data.marketPrice/data.bookValuePerShare,ordinaryYieldPct:ordinaryAnnualDividend/data.marketPrice*100,headlineYieldPct:(ordinaryAnnualDividend+4*capitalReturnQuarterly)/data.marketPrice*100,marginOfSafety20:0.8*pb.fairValue};
 }
 export function calculateSensitivity(data,a,roeChanges=[-2,-1,0,1,2],returnChanges=[-1,-0.5,0,0.5,1]) {
   return roeChanges.map(r=>returnChanges.map(k=>{try{return justifiedPriceToBook({bookValue:data.bookValuePerShare,roe:(a.roe+r)/100,requiredReturn:(a.requiredReturn+k)/100,growth:a.bookGrowth/100}).fairValue}catch{return null}}));
